@@ -672,6 +672,21 @@ function loadConfig(config) {
 }
 
 
+function setEmptySolution() {
+    let solution = {};
+    for (let day in CURRENT_CONFIG.slots) {
+        solution[day] = {};
+        CURRENT_CONFIG.slots[day].forEach(slot => {
+            solution[day][slot] = {};
+            CURRENT_CONFIG.posts.forEach(post => {
+                solution[day][slot][post] = "";
+            });
+        });
+    }
+    document.getElementById("input-file-export-solution-solution").value = JSON.stringify(solution);
+}
+
+
 function loadSolution(solution) {
     console.log("Loading solution:", solution);
     let slotCounts = {};
@@ -902,9 +917,11 @@ window.addEventListener("load", () => {
         let item = localStorage.getItem("config");
         if (item != null) {
             loadConfig(JSON.parse(item));
+            setEmptySolution();
         }
     }
     if (CURRENT_CONFIG == null) {
         loadConfig(clone(DEFAULT_CONFIG));
+        setEmptySolution();
     }
 });
